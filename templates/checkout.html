@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4" style="color:#eef3ff;">📋 Оформление заказа</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h4 style="color:#eef3ff;">Данные доставки</h4>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label style="color:#8895c9;">Адрес доставки</label>
+                    <input type="text" name="address" class="form-control" required 
+                           placeholder="Город, улица, дом, квартира">
+                </div>
+                
+                <div class="mb-3">
+                    <label style="color:#8895c9;">Телефон</label>
+                    <input type="tel" name="phone" class="form-control" required 
+                           placeholder="+7 (___) ___-__-__">
+                </div>
+                
+                <div class="mb-3">
+                    <label style="color:#8895c9;">Комментарий к заказу</label>
+                    <textarea name="comment" class="form-control" rows="3" 
+                              placeholder="Дополнительная информация"></textarea>
+                </div>
+                
+                <h4 style="color:#eef3ff; margin-top:30px;">Способ доставки</h4>
+                <div class="d-flex gap-2 flex-wrap">
+                    <label class="btn btn-outline-info">
+                        <input type="radio" name="delivery" value="courier" checked> Курьер (300 ₽)
+                    </label>
+                    <label class="btn btn-outline-info">
+                        <input type="radio" name="delivery" value="pickup"> Самовывоз (бесплатно)
+                    </label>
+                    <label class="btn btn-outline-info">
+                        <input type="radio" name="delivery" value="post"> Почта России (250 ₽)
+                    </label>
+                </div>
+                
+                <h4 style="color:#eef3ff; margin-top:30px;">Способ оплаты</h4>
+                <div class="d-flex gap-2 flex-wrap">
+                    <label class="btn btn-outline-success">
+                        <input type="radio" name="payment" value="card" checked> 💳 Картой онлайн
+                    </label>
+                    <label class="btn btn-outline-success">
+                        <input type="radio" name="payment" value="sbp"> 📱 СБП
+                    </label>
+                    <label class="btn btn-outline-success">
+                        <input type="radio" name="payment" value="cash"> 💵 При получении
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 mt-4" style="background:var(--accent); padding:15px; font-size:1.2rem;">
+                    ✅ Подтвердить заказ
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h5 style="color:#eef3ff;">Ваш заказ</h5>
+            
+            <div style="max-height: 400px; overflow-y: auto;">
+                {% for item in cart_items %}
+                <div class="d-flex justify-content-between align-items-center mb-3" 
+                     style="border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                    <div>
+                        <small style="color:#8895c9;">{{ item.product.name }}</small>
+                        <br>
+                        <small style="color:#5b8def;">{{ item.quantity }} x {{ "%.2f"|format(item.product.price) }} ₽</small>
+                    </div>
+                    <strong style="color:#8bb5ff;">{{ "%.2f"|format(item.product.price * item.quantity) }} ₽</strong>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div style="border-top: 2px solid var(--border); padding-top: 15px; margin-top: 15px;">
+                <div class="d-flex justify-content-between">
+                    <span style="color:#8895c9;">Товары:</span>
+                    <span style="color:#eef3ff;">{{ "%.2f"|format(total) }} ₽</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span style="color:#8895c9;">Доставка:</span>
+                    <span style="color:#eef3ff;" id="delivery-cost">300 ₽</span>
+                </div>
+                <div class="d-flex justify-content-between" style="font-size:1.2rem; font-weight:bold; margin-top:10px;">
+                    <span style="color:#eef3ff;">Итого:</span>
+                    <span style="color:#8bb5ff;" id="total-sum">{{ "%.2f"|format(total + 300) }} ₽</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const costs = {
+            'courier': 300,
+            'pickup': 0,
+            'post': 250
+        };
+        const cost = costs[this.value];
+        document.getElementById('delivery-cost').textContent = 
+            cost === 0 ? 'Бесплатно' : cost + ' ₽';
+        
+        const total = {{ total }} + cost;
+        document.getElementById('total-sum').textContent = total.toFixed(2) + ' ₽';
+    });
+});
+</script>
+{% endblock %}

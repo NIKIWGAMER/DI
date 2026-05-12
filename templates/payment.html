@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4" style="color:#eef3ff;">💳 Оплата игр и сервисов</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h4 style="color:#eef3ff;">Пополнение баланса</h4>
+            
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('steam')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-steam" style="font-size:3rem;"></i>
+                            <h5>Steam</h5>
+                            <p style="color:#8895c9;">Пополнение кошелька</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('psn')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-playstation" style="font-size:3rem;"></i>
+                            <h5>PlayStation</h5>
+                            <p style="color:#8895c9;">Пополнение PSN</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('xbox')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-xbox" style="font-size:3rem;"></i>
+                            <h5>Xbox</h5>
+                            <p style="color:#8895c9;">Пополнение Game Pass</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('mobile')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-phone" style="font-size:3rem;"></i>
+                            <h5>Мобильная связь</h5>
+                            <p style="color:#8895c9;">Пополнение телефона</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('internet')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-wifi" style="font-size:3rem;"></i>
+                            <h5>Интернет и ТВ</h5>
+                            <p style="color:#8895c9;">Оплата провайдеров</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-card" style="cursor:pointer;" onclick="selectService('other')">
+                        <div class="card-body text-center">
+                            <i class="bi bi-gift" style="font-size:3rem;"></i>
+                            <h5>Другие сервисы</h5>
+                            <p style="color:#8895c9;">Подарочные карты</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="payment-form" style="display:none;">
+                <h5 style="color:#eef3ff;" id="service-name"></h5>
+                <div class="mb-3">
+                    <label style="color:#8895c9;">Сумма пополнения</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-outline-info" onclick="setAmount(500)">500 ₽</button>
+                        <button class="btn btn-outline-info" onclick="setAmount(1000)">1000 ₽</button>
+                        <button class="btn btn-outline-info" onclick="setAmount(2000)">2000 ₽</button>
+                        <button class="btn btn-outline-info" onclick="setAmount(5000)">5000 ₽</button>
+                    </div>
+                    <div class="input-group mt-2">
+                        <input type="number" class="form-control" id="custom-amount" placeholder="Другая сумма">
+                        <button class="btn btn-outline-light" onclick="setCustomAmount()">ОК</button>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label style="color:#8895c9;">Способ оплаты</label>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-success">💳 Карта</button>
+                        <button class="btn btn-outline-success">📱 СБП</button>
+                        <button class="btn btn-outline-success">🏦 Счет</button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary w-100 mt-3" style="background:var(--accent);">
+                    Оплатить <span id="payment-amount">0</span> ₽
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h5 style="color:#eef3ff;">Информация</h5>
+            <ul style="color:#8895c9; font-size:0.9rem;">
+                <li>Моментальное зачисление</li>
+                <li>Без комиссии</li>
+                <li>Безопасные платежи</li>
+                <li>Поддержка 24/7</li>
+            </ul>
+            
+            <div class="mt-3 p-3" style="background:#0a0f24; border-radius:10px;">
+                <h6 style="color:#8bb5ff;">Популярные суммы</h6>
+                <p style="color:#8895c9;">Steam 500 ₽ - 84% выборов</p>
+                <p style="color:#8895c9;">PSN 1000 ₽ - 76% выборов</p>
+                <p style="color:#8895c9;">Мобильная связь - средний чек 300 ₽</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedService = null;
+let amount = 0;
+
+function selectService(service) {
+    selectedService = service;
+    const names = {
+        'steam': 'Steam Wallet',
+        'psn': 'PlayStation Network',
+        'xbox': 'Xbox Game Pass',
+        'mobile': 'Мобильная связь',
+        'internet': 'Интернет и ТВ',
+        'other': 'Другие сервисы'
+    };
+    
+    document.getElementById('service-name').textContent = names[service];
+    document.getElementById('payment-form').style.display = 'block';
+}
+
+function setAmount(value) {
+    amount = value;
+    document.getElementById('custom-amount').value = value;
+    document.getElementById('payment-amount').textContent = value;
+}
+
+function setCustomAmount() {
+    const value = document.getElementById('custom-amount').value;
+    if (value > 0) {
+        amount = parseFloat(value);
+        document.getElementById('payment-amount').textContent = amount;
+    }
+}
+</script>
+{% endblock %}

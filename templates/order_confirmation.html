@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center" style="padding:40px;">
+    <div style="font-size:4rem;">✅</div>
+    <h2 style="color:#eef3ff;">Заказ успешно оформлен!</h2>
+    <p style="color:#8895c9; font-size:1.2rem;">Номер вашего заказа: <strong style="color:#8bb5ff;">#{{ order.id }}</strong></p>
+    
+    <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px; max-width:500px; margin:20px auto; text-align:left;">
+        <h5 style="color:#eef3ff;">Детали заказа</h5>
+        <p style="color:#8895c9;"><strong>Статус:</strong> <span style="color:#2ecc71;">{{ order.status }}</span></p>
+        <p style="color:#8895c9;"><strong>Дата:</strong> {{ order.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+        <p style="color:#8895c9;"><strong>Сумма:</strong> <span style="color:#8bb5ff; font-weight:bold;">{{ "%.2f"|format(order.total) }} ₽</span></p>
+        <p style="color:#8895c9;"><strong>Доставка:</strong> {{ order.address }}</p>
+        <p style="color:#8895c9;"><strong>Телефон:</strong> {{ order.phone }}</p>
+        
+        <h5 style="color:#eef3ff; margin-top:20px;">Товары:</h5>
+        {% for item in order.items %}
+        <div style="color:#8895c9; margin:5px 0;">
+            {{ item.product.name }} x {{ item.quantity }} - {{ "%.2f"|format(item.price * item.quantity) }} ₽
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-primary" style="background:var(--accent); padding:12px 30px;">
+            🏠 На главную
+        </a>
+        <a href="{{ url_for('catalog') }}" class="btn btn-outline-info ms-2" style="padding:12px 30px;">
+            🛍️ Продолжить покупки
+        </a>
+    </div>
+</div>
+{% endblock %}

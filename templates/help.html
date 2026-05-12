@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4" style="color:#eef3ff;">❓ Помощь (FAQ)</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item" style="background:var(--bg-card); border:1px solid var(--border);">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background:var(--bg-card); color:#eef3ff;">
+                            Как оформить заказ?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:#8895c9;">
+                            1. Выберите товар в каталоге<br>
+                            2. Добавьте его в корзину<br>
+                            3. Перейдите в корзину и нажмите "Оформить заказ"<br>
+                            4. Укажите адрес доставки и контактные данные<br>
+                            5. Выберите способ оплаты<br>
+                            6. Подтвердите заказ
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" style="background:var(--bg-card); border:1px solid var(--border);">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background:var(--bg-card); color:#eef3ff;">
+                            Способы доставки
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:#8895c9;">
+                            • Курьерская доставка - 1-3 дня (от 300 ₽)<br>
+                            • Пункты выдачи - 2-5 дней (от 200 ₽)<br>
+                            • Почта России - 5-14 дней (от 150 ₽)<br>
+                            • Экспресс-доставка - на следующий день (от 500 ₽)<br>
+                            Бесплатная доставка при заказе от 5000 ₽
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" style="background:var(--bg-card); border:1px solid var(--border);">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background:var(--bg-card); color:#eef3ff;">
+                            Возврат и обмен товара
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:#8895c9;">
+                            Вы можете вернуть товар в течение 14 дней после получения, если:<br>
+                            • Товар не был в использовании<br>
+                            • Сохранена упаковка и комплектация<br>
+                            • Имеется чек или подтверждение покупки<br>
+                            Возврат денег осуществляется в течение 10 рабочих дней
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" style="background:var(--bg-card); border:1px solid var(--border);">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background:var(--bg-card); color:#eef3ff;">
+                            Гарантийное обслуживание
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:#8895c9;">
+                            Все товары имеют официальную гарантию:<br>
+                            • Электроника - 1 год<br>
+                            • Комплектующие ПК - 3 года<br>
+                            • Аксессуары - 6 месяцев<br>
+                            Для гарантийного обслуживания обратитесь в сервисный центр с чеком
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" style="background:var(--bg-card); border:1px solid var(--border);">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" style="background:var(--bg-card); color:#eef3ff;">
+                            Оплата и безопасность
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body" style="color:#8895c9;">
+                            Мы принимаем:<br>
+                            • Банковские карты (Visa, Mastercard, МИР)<br>
+                            • Система быстрых платежей (СБП)<br>
+                            • Электронные кошельки<br>
+                            • Наложенный платеж<br>
+                            Все платежи защищены по стандарту PCI DSS
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h5 style="color:#eef3ff;">Контакты</h5>
+            <div style="color:#8895c9;">
+                <p><strong>📞 Телефон:</strong><br>8-800-77-07-999</p>
+                <p><strong>📧 Email:</strong><br>support@techhub.ru</p>
+                <p><strong>🕐 Часы работы:</strong><br>Ежедневно с 03:00 до 22:00</p>
+                <p><strong>💬 Онлайн-чат:</strong><br>Среднее время ответа - 2 минуты</p>
+            </div>
+            
+            <button class="btn btn-primary w-100 mt-3" style="background:var(--accent);">
+                💬 Начать чат
+            </button>
+        </div>
+        
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px; margin-top:20px;">
+            <h5 style="color:#eef3ff;">Быстрые ссылки</h5>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('catalog') }}" class="btn btn-outline-info">📦 Каталог товаров</a>
+                <a href="{{ url_for('cart') }}" class="btn btn-outline-info">🛒 Корзина</a>
+                <a href="{{ url_for('profile') }}" class="btn btn-outline-info">👤 Личный кабинет</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Активируем аккордеон Bootstrap
+document.querySelectorAll('.accordion-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const collapse = document.querySelector(button.dataset.bsTarget);
+        if (collapse) {
+            const isOpen = collapse.classList.contains('show');
+            // Закрываем все
+            document.querySelectorAll('.accordion-collapse').forEach(c => c.classList.remove('show'));
+            document.querySelectorAll('.accordion-button').forEach(b => b.classList.add('collapsed'));
+            // Открываем текущий
+            if (!isOpen) {
+                collapse.classList.add('show');
+                button.classList.remove('collapsed');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

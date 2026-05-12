@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 style="color:#eef3ff;">Каталог товаров</h3>
+<div class="d-flex gap-3 mb-4 flex-wrap">
+    <a href="{{ url_for('catalog') }}" class="btn btn-sm btn-outline-light">Все</a>
+    {% for cat in categories %}
+        <a href="{{ url_for('catalog', category=cat) }}" class="btn btn-sm btn-outline-info">{{ cat }}</a>
+    {% endfor %}
+</div>
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for p in products %}
+        {% include 'product_card.html' %}
+    {% endfor %}
+</div>
+{% endblock %}

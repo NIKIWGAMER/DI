@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:30px; max-width:500px;">
+    <h3 class="mb-3" style="color:#eef3ff;">Профиль пользователя</h3>
+    <div class="mb-3">
+        <p><strong style="color:#8895c9;">Имя:</strong> <span style="color:#e0e4f0;">{{ user.username }}</span></p>
+        <p><strong style="color:#8895c9;">Email:</strong> <span style="color:#e0e4f0;">{{ user.email }}</span></p>
+    </div>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger" style="background:#ff4d6d; border:none;">Выйти</a>
+</div>
+{% endblock %}

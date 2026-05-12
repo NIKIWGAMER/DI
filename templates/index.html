@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block content %}
+{% macro product_card(product) %}
+<div class="col">
+    <div class="card bg-card h-100">
+        <div class="img-wrap" style="background:#0a0f24; border-radius:10px; height:180px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        </div>
+        <div class="card-body d-flex flex-column">
+            <h6 class="card-title">{{ product.name }}</h6>
+            <p class="card-text fw-bold" style="color:#8bb5ff; font-size:1.2rem;">{{ "%.2f"|format(product.price) }} ₽</p>
+            <div class="mt-auto d-flex gap-2">
+                <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-sm btn-outline-light">В корзину</a>
+                <a href="{{ url_for('add_to_favorites', product_id=product.id) }}" class="btn btn-sm btn-outline-danger"><i class="bi bi-heart"></i></a>
+                <a href="{{ url_for('product', product_id=product.id) }}" class="btn btn-sm btn-outline-info">Подробнее</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+<h2 class="mb-4" style="color:#eef3ff; font-weight:700;">Главная</h2>
+
+<!-- Карточки-кнопки разделов -->
+<div class="row row-cols-2 row-cols-md-4 g-3 mb-5">
+    <div class="col"><a href="{{ url_for('catalog') }}" class="btn btn-outline-info w-100 py-3 fw-bold">📦 Каталог</a></div>
+    <div class="col"><a href="{{ url_for('build_pc') }}" class="btn btn-outline-info w-100 py-3 fw-bold">🖥️ Собрать ПК</a></div>
+    <div class="col"><a href="{{ url_for('payment') }}" class="btn btn-outline-info w-100 py-3 fw-bold">💳 Оплата игр и сервисов</a></div>
+    <div class="col"><a href="{{ url_for('help_page') }}" class="btn btn-outline-info w-100 py-3 fw-bold">❓ Помощь (FAQ)</a></div>
+</div>
+
+<!-- Персональная подборка -->
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Персональная подборка</h4>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+        <a href="{{ url_for('catalog', category='Смартфоны') }}" class="btn btn-sm btn-outline-info">Смартфоны</a>
+        <a href="{{ url_for('catalog', category='Мониторы') }}" class="btn btn-sm btn-outline-info">Мониторы</a>
+        <a href="{{ url_for('catalog', category='Ноутбуки') }}" class="btn btn-sm btn-outline-info">Ноутбуки</a>
+        <a href="{{ url_for('catalog', category='Видеокарты') }}" class="btn btn-sm btn-outline-info">Видеокарты</a>
+        <a href="{{ url_for('catalog', category='Материнские платы') }}" class="btn btn-sm btn-outline-info">Материнские платы</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 g-3">
+        {% for p in smartphones[:4] %}{{ product_card(p) }}{% endfor %}
+        {% for p in monitors[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in notebooks[:3] %}{{ product_card(p) }}{% endfor %}
+        {% for p in videocards[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in motherboards[:1] %}{{ product_card(p) }}{% endfor %}
+    </div>
+</section>
+
+<!-- Сезонные товары -->
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Сезонные товары</h4>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+        <a href="{{ url_for('catalog', category='Вентиляторы') }}" class="btn btn-sm btn-outline-success">Вентиляторы</a>
+        <a href="{{ url_for('catalog', category='Леска для триммеров') }}" class="btn btn-sm btn-outline-success">Леска для триммеров</a>
+        <a href="{{ url_for('catalog', category='Электросамокаты') }}" class="btn btn-sm btn-outline-success">Электросамокаты</a>
+        <a href="{{ url_for('catalog', category='Мобильные кондиционеры') }}" class="btn btn-sm btn-outline-success">Мобильные кондиционеры</a>
+        <a href="{{ url_for('catalog', category='Триммеры бензиновые') }}" class="btn btn-sm btn-outline-success">Триммеры бензиновые</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 g-3">
+        {% for p in fans[:4] %}{{ product_card(p) }}{% endfor %}
+        {% for p in trimmer_line[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in scooters[:3] %}{{ product_card(p) }}{% endfor %}
+        {% for p in conditioners[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in trimmers[:1] %}{{ product_card(p) }}{% endfor %}
+    </div>
+</section>
+
+<!-- Умный дом -->
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Умный дом</h4>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+        <a href="{{ url_for('catalog', category='Датчики') }}" class="btn btn-sm btn-outline-primary">Датчики</a>
+        <a href="{{ url_for('catalog', category='Освещение') }}" class="btn btn-sm btn-outline-primary">Освещение</a>
+        <a href="{{ url_for('catalog', category='Центры управления') }}" class="btn btn-sm btn-outline-primary">Центры управления</a>
+        <a href="{{ url_for('catalog', category='Розетки') }}" class="btn btn-sm btn-outline-primary">Розетки</a>
+        <a href="{{ url_for('catalog', category='Выключатели') }}" class="btn btn-sm btn-outline-primary">Выключатели</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 g-3">
+        {% for p in sensors[:4] %}{{ product_card(p) }}{% endfor %}
+        {% for p in lighting[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in control_centers[:3] %}{{ product_card(p) }}{% endfor %}
+        {% for p in sockets[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in switches[:1] %}{{ product_card(p) }}{% endfor %}
+    </div>
+</section>
+
+<!-- Комплектующие для ПК -->
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Комплектующие для ПК</h4>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+        <a href="{{ url_for('catalog', category='Процессоры') }}" class="btn btn-sm btn-outline-danger">Процессоры</a>
+        <a href="{{ url_for('catalog', category='Материнские платы') }}" class="btn btn-sm btn-outline-danger">Материнские платы</a>
+        <a href="{{ url_for('catalog', category='Видеокарты') }}" class="btn btn-sm btn-outline-danger">Видеокарты</a>
+        <a href="{{ url_for('catalog', category='Оперативная память') }}" class="btn btn-sm btn-outline-danger">Оперативная память</a>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4 g-3">
+        {% for p in cpus[:4] %}{{ product_card(p) }}{% endfor %}
+        {% for p in motherboards[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in videocards[:2] %}{{ product_card(p) }}{% endfor %}
+        {% for p in rams[:4] %}{{ product_card(p) }}{% endfor %}
+    </div>
+</section>
+
+<!-- Бренды -->
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Бренды</h4>
+    <div class="d-flex flex-wrap gap-3 align-items-center p-3 rounded brand-logos" style="background:#151f40; border:1px solid var(--border-hover);">
+        {% for brand in brands %}
+            <img src="{{ brand.logo_url }}" alt="{{ brand.name }}" style="height:40px; max-width:100px;">
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Недавно просмотренные -->
+{% if recent_products %}
+<section class="mb-5">
+    <h4 class="mb-3" style="color:#eef3ff;">Вы недавно смотрели</h4>
+    <div class="row row-cols-2 row-cols-md-6 g-2">
+        {% for p in recent_products[:6] %}
+        <div class="col">
+            <div class="card bg-card h-100">
+                <div class="img-wrap" style="background:#0a0f24; border-radius:10px; height:100px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                    <img src="{{ p.image_url }}" alt="{{ p.name }}" style="max-width:100%; max-height:100%; object-fit:contain;">
+                </div>
+                <div class="card-body p-2 text-center">
+                    <small>{{ p.name }}</small><br>
+                    <a href="{{ url_for('product', product_id=p.id) }}" class="btn btn-sm btn-outline-info mt-1">Смотреть</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

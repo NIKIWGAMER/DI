@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHub — интернет-магазин электроники</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <header class="header-bar py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto logo">
+                    <a href="{{ url_for('index') }}" class="text-decoration-none">
+                        <i class="bi bi-lightning-charge-fill"></i> TechHub
+                    </a>
+                </div>
+                <div class="col">
+                    <nav class="d-flex justify-content-start gap-3 flex-wrap">
+                        <a href="{{ url_for('catalog') }}" class="text-decoration-none">Каталог</a>
+                        <a href="{{ url_for('build_pc') }}" class="text-decoration-none">Собрать ПК</a>
+                        <a href="{{ url_for('payment') }}" class="text-decoration-none">Оплата игр/сервисов</a>
+                        <a href="{{ url_for('help_page') }}" class="text-decoration-none">Помощь</a>
+                    </nav>
+                </div>
+                <div class="col-auto d-flex gap-3 align-items-center">
+                    <form action="{{ url_for('search') }}" method="get" class="d-flex search-form">
+                        <input class="form-control me-1" type="search" name="query" placeholder="Поиск товаров" aria-label="Поиск">
+                        <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
+                    <a href="{{ url_for('favorites') }}" class="text-light position-relative me-2" title="Избранное">
+                        <i class="bi bi-heart fs-5"></i>
+                        {% if favorites_count %}
+                        <span class="badge rounded-pill bg-danger" style="position:absolute; top:-8px; right:-8px; font-size:0.7rem;">{{ favorites_count }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('cart') }}" class="text-light position-relative me-2" title="Корзина">
+                        <i class="bi bi-cart fs-5"></i>
+                        {% if cart_count %}
+                        <span class="badge rounded-pill bg-danger" style="position:absolute; top:-8px; right:-8px; font-size:0.7rem;">{{ cart_count }}</span>
+                        {% endif %}
+                    </a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('profile') }}" class="text-light" title="Профиль">
+                        <i class="bi bi-person-circle fs-5"></i>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="text-light ms-2">Выйти</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="text-light">Войти</a>
+                    <a href="{{ url_for('register') }}" class="text-light ms-2">Регистрация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4 flex-grow-1">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-bar py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Компания</h5>
+                    <ul class="list-unstyled small">
+                        <li>О компании</li><li>Новости</li><li>Партнерам</li><li>Вакансии</li>
+                        <li>Политика обработки данных</li><li>Правила продаж</li><li>Правила сайта</li>
+                        <li>Рекомендательные технологии</li><li>Сервисные центры</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Покупателям</h5>
+                    <ul class="list-unstyled small">
+                        <li>Как оформить заказ</li><li>Способы оплаты</li><li>Кредиты</li><li>Доставка</li>
+                        <li>Статус заказа</li><li>Обмен, возврат, гарантия</li><li>Проверка статуса ремонта</li>
+                    </ul>
+                    <h5>Юридическим лицам</h5>
+                    <ul class="list-unstyled small">
+                        <li>Проверка счета</li><li>Корпоративные отделы</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Бонусы</h5>
+                    <ul class="list-unstyled small">
+                        <li>Подарочные карты</li><li>Бонусная программа</li>
+                    </ul>
+                    <h5>Помощь</h5>
+                    <ul class="list-unstyled small">
+                        <li>Обратная связь</li><li>Оставайтесь на связи</li>
+                        <li class="fw-bold">8-800-77-07-999</li>
+                        <li>с 03:00 до 22:00</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>TechHub всегда под рукой</h5>
+                    <p>Следите за новинками и акциями:</p>
+                    <form class="d-flex mb-2">
+                        <input type="email" class="form-control me-1" placeholder="Введите email">
+                        <button class="btn btn-warning btn-sm" type="submit">Подписаться</button>
+                    </form>
+                    <div class="small">
+                        <a href="#" class="text-secondary">Политика конфиденциальности</a> и <a href="#" class="text-secondary">обработки персональных данных</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4" style="color:#eef3ff;">🖥️ Собрать ПК</h2>
+<p style="color:#8895c9; margin-bottom:20px;">Выберите компоненты для вашего идеального компьютера</p>
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px;">
+            <h4 style="color:#eef3ff;">Выбор компонентов</h4>
+            
+            <div class="mb-3">
+                <label style="color:#8895c9;">Процессор</label>
+                <select class="form-control component-select" data-type="cpu">
+                    <option value="">Выберите процессор</option>
+                    {% for cpu in cpus %}
+                    <option value="{{ cpu.id }}" data-price="{{ cpu.price }}">{{ cpu.name }} - {{ "%.2f"|format(cpu.price) }} ₽</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label style="color:#8895c9;">Видеокарта</label>
+                <select class="form-control component-select" data-type="gpu">
+                    <option value="">Выберите видеокарту</option>
+                    {% for gpu in gpus %}
+                    <option value="{{ gpu.id }}" data-price="{{ gpu.price }}">{{ gpu.name }} - {{ "%.2f"|format(gpu.price) }} ₽</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label style="color:#8895c9;">Материнская плата</label>
+                <select class="form-control component-select" data-type="motherboard">
+                    <option value="">Выберите материнскую плату</option>
+                    {% for mb in motherboards %}
+                    <option value="{{ mb.id }}" data-price="{{ mb.price }}">{{ mb.name }} - {{ "%.2f"|format(mb.price) }} ₽</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label style="color:#8895c9;">Оперативная память</label>
+                <select class="form-control component-select" data-type="ram">
+                    <option value="">Выберите оперативную память</option>
+                    {% for ram in rams %}
+                    <option value="{{ ram.id }}" data-price="{{ ram.price }}">{{ ram.name }} - {{ "%.2f"|format(ram.price) }} ₽</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div style="background:var(--bg-card); border:1px solid var(--border-hover); border-radius:16px; padding:25px; position: sticky; top: 20px;">
+            <h4 style="color:#eef3ff;">Итоговая стоимость</h4>
+            <div id="selected-components" style="color:#8895c9; margin-bottom:20px;">
+                <p>Выберите компоненты для расчета</p>
+            </div>
+            <div style="font-size:2rem; font-weight:bold; color:#8bb5ff;" id="total-price">0 ₽</div>
+            
+            {% if current_user.is_authenticated %}
+            <button class="btn btn-primary w-100 mt-3" style="background:var(--accent);" onclick="saveBuild()">
+                💾 Сохранить сборку
+            </button>
+            {% else %}
+            <p style="color:#8895c9; margin-top:15px;">
+                <a href="{{ url_for('login') }}" style="color:#5b8def;">Войдите</a>, чтобы сохранить сборку
+            </p>
+            {% endif %}
+            
+            <button class="btn btn-outline-info w-100 mt-2" onclick="resetBuild()">
+                🔄 Сбросить
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedComponents = {};
+
+document.querySelectorAll('.component-select').forEach(select => {
+    select.addEventListener('change', function() {
+        if (this.value) {
+            const option = this.options[this.selectedIndex];
+            selectedComponents[this.dataset.type] = {
+                id: this.value,
+                name: option.text.split(' - ')[0],
+                price: parseFloat(option.dataset.price)
+            };
+        } else {
+            delete selectedComponents[this.dataset.type];
+        }
+        updateTotal();
+    });
+});
+
+function updateTotal() {
+    let total = 0;
+    let componentsHtml = '';
+    
+    for (let [type, component] of Object.entries(selectedComponents)) {
+        total += component.price;
+        const typeNames = {
+            cpu: 'Процессор',
+            gpu: 'Видеокарта',
+            motherboard: 'Мат. плата',
+            ram: 'ОЗУ'
+        };
+        componentsHtml += `<p style="margin:5px 0;"><strong>${typeNames[type]}:</strong> ${component.name}<br>${component.price.toFixed(2)} ₽</p>`;
+    }
+    
+    if (componentsHtml === '') {
+        componentsHtml = '<p>Выберите компоненты для расчета</p>';
+    }
+    
+    document.getElementById('selected-components').innerHTML = componentsHtml;
+    document.getElementById('total-price').textContent = total.toFixed(2) + ' ₽';
+}
+
+function resetBuild() {
+    selectedComponents = {};
+    document.querySelectorAll('.component-select').forEach(select => {
+        select.value = '';
+    });
+    updateTotal();
+}
+
+function saveBuild() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/save-build';
+    
+    const nameInput = document.createElement('input');
+    nameInput.type = 'hidden';
+    nameInput.name = 'name';
+    nameInput.value = 'Моя сборка ' + new Date().toLocaleDateString();
+    form.appendChild(nameInput);
+    
+    for (let [type, component] of Object.entries(selectedComponents)) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = type;
+        input.value = component.name;
+        form.appendChild(input);
+    }
+    
+    const totalInput = document.createElement('input');
+    totalInput.type = 'hidden';
+    totalInput.name = 'total';
+    totalInput.value = Object.values(selectedComponents).reduce((sum, comp) => sum + comp.price, 0);
+    form.appendChild(totalInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
+{% endblock %}
